@@ -1,69 +1,71 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+
+import { useState } from "react";
+import ScrollProgress from "@/components/ScrollProgress";
+import Navbar from "@/components/Navbar";
+import Hero from "@/components/Hero";
+import About from "@/components/About";
+import Experience from "@/components/Experience";
+import Projects from "@/components/Projects";
+import Skills from "@/components/Skills";
+import Education from "@/components/Education";
+import Contact from "@/components/Contact";
+import Footer from "@/components/Footer";
+import Toast from "@/components/Toast";
 
 export default function Home() {
+  const [toastMessage, setToastMessage] = useState("");
+  const [toastVisible, setToastVisible] = useState(false);
+
+  const triggerToast = (msg: string) => {
+    setToastMessage(msg);
+    setToastVisible(true);
+    setTimeout(() => {
+      setToastVisible(false);
+    }, 2800);
+  };
+
+  const handleCopyEmail = () => {
+    navigator.clipboard
+      .writeText("jiten.j.mistry@gmail.com")
+      .then(() => triggerToast("Copied jiten.j.mistry@gmail.com to clipboard!"))
+      .catch((err) => console.error("Clipboard copy failed:", err));
+  };
+
+  const handleCopyAllContact = () => {
+    const fullContact = `Jiten Jayeshkumar Mistry\nEmail: jiten.j.mistry@gmail.com\nPhone: +91 8780693961\nLinkedIn: https://linkedin.com/in/jiten-mistry\nLocation: Navsari, Gujarat, India`;
+    navigator.clipboard
+      .writeText(fullContact)
+      .then(() => triggerToast("All contact information copied to clipboard!"))
+      .catch((err) => console.error("Clipboard copy failed:", err));
+  };
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>
-            To get started, edit the{" "}
-            <code className={styles.code}>page.tsx</code> file.
-          </h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+    <>
+      {/* Ambient background glow elements */}
+      <div className="ambient-glow glow-1" aria-hidden="true" />
+      <div className="ambient-glow glow-2" aria-hidden="true" />
+      <div className="ambient-glow glow-3" aria-hidden="true" />
+      <div className="grid-overlay" aria-hidden="true" />
+
+      {/* Reactive scroll indicator */}
+      <ScrollProgress />
+
+      {/* Glass navigation header */}
+      <Navbar />
+
+      <main className="page-wrapper">
+        <Hero onCopyEmail={handleCopyEmail} />
+        <About />
+        <Experience />
+        <Projects />
+        <Skills />
+        <Education />
+        <Contact onCopyAllContact={handleCopyAllContact} />
       </main>
-    </div>
+
+      <Footer />
+      <Toast message={toastMessage} visible={toastVisible} />
+    </>
   );
 }
